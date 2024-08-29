@@ -20,6 +20,7 @@ import { Input } from "@/components/ui/input"
 import { authFormSchema } from '@/lib/utils';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { signIn, signUp } from '@/lib/actions/user.action';
 
 
 const formSchema = z.object({
@@ -49,27 +50,30 @@ const formSchema = authFormSchema(type);
     try{
         // sign up with   & create plaid token
         if(type === 'sign-up') {
-
+       
           const newUser = await signUp(data);
+
           setUser(newUser);
-        }
+          }
 
-        
-        if(type === 'sign-in') {
-          const response = await signIn({
-            email: data.email,
-            password: data.password,
-          })
-
-          if(response) router.push('/')
+          if(type === 'sign-in') {
+          //   const response = await signIn({
+          //     email: data.email,
+          //     password: data.password,
+          //   })
+  
+          //  if(response) router.push('/')
+          }
+        } catch (error){
+          console.error();
+        } finally{
+          setIsLoading(false);
         }
-        
-    }catch (error){
-      console.error();
-    } finally{
-      setIsLoading(false);
     }
-  }
+
+        
+        
+  
   return (
     <section className='auth-form'>
         <header className='flex flex-col gap-5 md:gap-8'>

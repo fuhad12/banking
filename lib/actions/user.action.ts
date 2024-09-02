@@ -7,12 +7,16 @@ import { parseStringify } from "../utils";
  
 
 
-export const signIn = async () =>{
+export const signIn = async ({email, password }: signInProps) => {
     try {
+      const { account } = await createAdminClient();
+      const response = await account.createEmailPasswordSession(email, password);
+
+      return parseStringify(response);
        
     }catch (error){
         console.error('Error', error);
-    }
+    } 
 }
 
 export const signUp = async (userData: SignUpParams) =>{
@@ -54,4 +58,18 @@ export async function getLoggedInUser() {
       return null;
     }
   }
+
+// function createEmailPasswordSession(email: string, password: string) {
+//   throw new Error("Function not implemented.");
+//}
+export const logoutAccount = async () => {
+  try {
+    const { account } = await createSessionClient();
+    cookies().delete('appwrite-session');
+    await account.deleteSession('current');
+    
+  } catch (error) {
+    return null;
+  }
+}
   
